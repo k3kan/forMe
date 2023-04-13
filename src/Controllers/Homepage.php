@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Templates\FrontendTwigRenderer;
+use App\Render\FrontendTwigRenderer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

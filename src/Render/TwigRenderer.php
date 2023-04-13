@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace App\Templates;
+namespace App\Render;
 
 use Twig\Environment;
 

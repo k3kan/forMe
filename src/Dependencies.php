@@ -34,7 +34,7 @@ $injector->delegate('Twig\Environment', function () use ($injector)
     return $twig;
 });
 
-$injector->alias('App\Templates\Renderer','App\Templates\FrontendTwigRenderer');
+$injector->alias('App\Render\Renderer', 'App\Render\FrontendTwigRenderer');
 
 $injector->alias('App\Menu\MenuReader', 'App\Menu\ArrayMenuReader');
 $injector->share('App\Menu\ArrayMenuReader');

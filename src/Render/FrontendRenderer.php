@@ -1,5 +1,5 @@
 <?php
 
-namespace App\Templates;
+namespace App\Render;
 
 interface FrontendRenderer extends Renderer {}

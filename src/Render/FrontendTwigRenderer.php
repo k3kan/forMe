@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Templates;
+namespace App\Render;
 
 use App\Menu\ArrayMenuReader;
 use Twig\Environment;

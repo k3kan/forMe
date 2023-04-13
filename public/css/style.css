@@ -9,11 +9,11 @@ body {
 
 #layout.active #menu {
     left: 150px;
-    width: 150px;
+    width: 200px;
 }
 
 #layout.active .menu-link {
-    left: 150px;
+    left: 200px;
 }
 
 .content {
@@ -47,7 +47,7 @@ body {
 
 #menu {
     margin-left: -150px;
-    width: 150px;
+    width: 200px;
     position: fixed;
     top: 0;
     left: 0;
@@ -56,12 +56,14 @@ body {
     background: #191818;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    word-wrap: break-word;
 }
 
 #menu a {
     color: #999;
     border: none;
     padding: 0.6em 0 0.6em 0.6em;
+    white-space: normal;
 }
 
 #menu .pure-menu,

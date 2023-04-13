@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Page\FilePageReader;
 use App\Page\InvalidPageException;
-use App\Templates\FrontendTwigRenderer;
+use App\Render\FrontendTwigRenderer;
 use Symfony\Component\HttpFoundation\Response;
 
 class Page
