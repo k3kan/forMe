@@ -39,4 +39,8 @@ $injector->alias('App\Render\Renderer', 'App\Render\FrontendTwigRenderer');
 $injector->alias('App\Menu\MenuReader', 'App\Menu\ArrayMenuReader');
 $injector->share('App\Menu\ArrayMenuReader');
 
+$injector->define('App\Api\WeatherMap', [
+    ':token' => $_ENV['WEATHER_TOKEN']
+]);
+
 return $injector;

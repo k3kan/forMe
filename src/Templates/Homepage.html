@@ -2,4 +2,12 @@
 {% block content %}
 <h1>Start Page</h1>
 Hello {{ name }}
+
+{% if weather['town'] is empty %}
+<p>Информацию о погоде в настоящий момент получить не удается. Извиняемся за неудобства.</p>
+{% else %}
+<p>Погода в  {{ weather['town'] }}</p>
+<p>В данный момент на улице {{ weather['temperature'] }}°C. Ощущается как {{ weather['feelsLike'] }}°C</p>
+<p>Скорость ветра составляет {{ weather['wind'] }} м/с, влажность {{ weather['humidity'] }}%.</p>
+{% endif %}
 {% endblock %}
