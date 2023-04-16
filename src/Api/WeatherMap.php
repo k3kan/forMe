@@ -48,10 +48,10 @@ class WeatherMap implements ApiWeather
             $weather['humidity'] =  $data['main']['humidity'];
             $weather['town'] =  $data['name'];
         } catch (ClientException $e) {
+            $weather['error'] =  true;
             /** TODO писать в логи */
-            echo Psr7\Message::toString($e->getRequest());
-            echo Psr7\Message::toString($e->getResponse());
-            return [];
+            Psr7\Message::toString($e->getRequest());
+            Psr7\Message::toString($e->getResponse());
         }
 
         return $weather;

@@ -3,4 +3,5 @@
 return [
     ['GET', '/', ['App\Controllers\Homepage', 'show']],
     ['GET', '/{slug}', ['App\Controllers\Page', 'show']],
+    ['POST', '/weather', ['App\Controllers\Homepage', 'getWeather']],
 ];

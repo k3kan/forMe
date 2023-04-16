@@ -1,13 +1,31 @@
 {% extends "Layout.html" %}
 {% block content %}
-<h1>Start Page</h1>
-Hello {{ name }}
 
-{% if weather['town'] is empty %}
-<p>Информацию о погоде в настоящий момент получить не удается. Извиняемся за неудобства.</p>
+{% if weather %}
+    {% if weather['error'] %}
+        <p>Информацию о погоде в настоящий момент получить не удается. Извиняемся за неудобства.</p>
+    {% else %}
+        <p>Погода в  {{ weather['town'] }}</p>
+        <p>В данный момент на улице {{ weather['temperature'] }}°C. Ощущается как {{ weather['feelsLike'] }}°C</p>
+        <p>Скорость ветра составляет {{ weather['wind'] }} м/с, влажность {{ weather['humidity'] }}%.</p>
+    {% endif %}
 {% else %}
-<p>Погода в  {{ weather['town'] }}</p>
-<p>В данный момент на улице {{ weather['temperature'] }}°C. Ощущается как {{ weather['feelsLike'] }}°C</p>
-<p>Скорость ветра составляет {{ weather['wind'] }} м/с, влажность {{ weather['humidity'] }}%.</p>
+    {% if validateError %}
+        <p>{{  validateError }}</p>
+    {% endif %}
+    <h1>Получить прогноз погоды по координатам местности</h1>
+    <form action="/weather" method="post">
+        <ul>
+            <li>
+                <label for="lat">Введите широту местоположения</label>
+                <input type="number" step="any" name="lat" id="lat">
+            </li>
+            <li>
+                <label for="lot">Введите долготу местоположения</label>
+                <input type="number" step="any" name="lot" id="lot">
+            </li>
+            <button type="submit">Отправить</button>
+        </ul>
+    </form>
 {% endif %}
 {% endblock %}
