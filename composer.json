@@ -23,6 +23,7 @@
     "rdlowrey/auryn": "^1.4",
     "twig/twig": "^3.5",
     "guzzlehttp/guzzle": "^7.0",
-    "doctrine/migrations": "^3.5"
+    "doctrine/migrations": "^3.5",
+    "ext-pdo": "*"
   }
 }
