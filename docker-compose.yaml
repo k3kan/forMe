@@ -12,6 +12,8 @@ services:
   php:
     build:
       dockerfile: ./docker/php/Dockerfile
+      args:
+       - SERVER_TOKEN=${SERVER_TOKEN}
     volumes:
       - /app/vendor # the folder is not overwritten
       - ./docker/php/conf.d/php.ini:/usr/local/etc/php/php.ini
@@ -21,11 +23,13 @@ services:
       - host.docker.internal:host-gateway # for xdebug
     environment:
       WEATHER_TOKEN: ${WEATHER_TOKEN}
+      TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_HOST: ${MYSQL_HOST}
+      SERVER_TOKEN: ${SERVER_TOKEN}
   #mysql
   db:
     image: mysql:8.0
