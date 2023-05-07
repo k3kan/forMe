@@ -14,9 +14,6 @@ class Homepage
 
     public function show()
     {
-    /*    $this->weatherApi->setLongitude(49.66);
-        $this->weatherApi->setLatitude(58.59);
-        $weather = $this->weatherApi->getWeather();*/
         $data = [
             'name' =>  $this->request->query->get('name', 'User'),
         ];
@@ -27,7 +24,6 @@ class Homepage
 
     public function getWeather()
     {
-        /** TODO получаем данные с формы и подаем запрос к апи погоды */
         $data = $this->request->request->all();
         foreach ($data as $id => $value) {
             $data[$id] = filter_var($value, FILTER_VALIDATE_FLOAT);
