@@ -3,6 +3,7 @@
 use Auryn\Injector;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use App\Pdo\Database;
 
 $injector = new Injector();
 
@@ -41,6 +42,14 @@ $injector->share('App\Menu\ArrayMenuReader');
 
 $injector->define('App\Api\WeatherMap', [
     ':token' => $_ENV['WEATHER_TOKEN']
+]);
+
+$injector->define('App\Controllers\Mailing', [
+    ':token' => $_ENV['TELEGRAM_TOKEN']
+]);
+
+$injector->define('App\Models\Model', [
+    ':db' => Database::getInstance(),
 ]);
 
 return $injector;
