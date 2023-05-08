@@ -49,9 +49,7 @@ class WeatherMap implements ApiWeather
             $weather['town'] =  $data['name'];
         } catch (ClientException $e) {
             $weather['error'] =  true;
-            /** TODO писать в логи */
-            Psr7\Message::toString($e->getRequest());
-            Psr7\Message::toString($e->getResponse());
+            error_log ("Ответ не получен. Смотреть подробности " . Psr7\Message::toString($e->getRequest()) . Psr7\Message::toString($e->getResponse()));
         }
 
         return $weather;

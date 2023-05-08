@@ -64,8 +64,7 @@ SQL;
             if ($error->getStatusCode() === 403) {
                 Users::deleteUser($user['username']);
             } else {
-                /** TODO логировать */
-                echo Message::toString($e->getResponse());
+                error_log(Message::toString($e->getResponse()));
             }
         }
     }

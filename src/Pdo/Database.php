@@ -17,8 +17,7 @@ class Database
             $this->pdo = new \PDO("mysql:host={$_ENV['MYSQL_HOST']};dbname={$_ENV['MYSQL_DATABASE']}", $_ENV['MYSQL_USER'], $_ENV['MYSQL_PASSWORD']);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $e) {
-            /** TODO запись в логи */
-            echo "Connectiond failed " . $e->getMessage();
+            error_log("Ошибка соединения с бд" . $e->getMessage());
         }
     }
 
@@ -37,7 +36,7 @@ class Database
             $stmt->execute($params);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo throw new Exception($e->getMessage());
+            error_log($e->getMessage());
         }
     }
 }
