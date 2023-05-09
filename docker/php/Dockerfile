@@ -7,7 +7,7 @@ RUN apk update && apk add curl
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
 RUN set -eux; \
-    install-php-extensions pdo_mysql;
+    install-php-extensions pdo pdo_mysql;
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
@@ -29,6 +29,7 @@ ARG SERVER_TOKEN
 
 RUN echo "0 9 * * * /usr/bin/curl  http://nginx/mailings?token=$SERVER_TOKEN >> /app/logs/cron.log 2>&1" >> /var/spool/cron/crontabs/root
 
-RUN /app/vendor/bin/doctrine-migrations  migrations:migrate --configuration=/app/src/migrations.php --db-configuration=/app/src/migrations-db.php
+#execute migrations
+CMD /app/vendor/bin/doctrine-migrations migrations:migrate --configuration=/app/src/migrations.php --db-configuration=/app/src/migrations-db.php --no-interaction
 
 CMD crond && php-fpm
