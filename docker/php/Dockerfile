@@ -29,7 +29,4 @@ ARG SERVER_TOKEN
 
 RUN echo "0 9 * * * /usr/bin/curl  http://nginx/mailings?token=$SERVER_TOKEN >> /app/logs/cron.log 2>&1" >> /var/spool/cron/crontabs/root
 
-#execute migrations
-CMD /app/vendor/bin/doctrine-migrations migrations:migrate --configuration=/app/src/migrations.php --db-configuration=/app/src/migrations-db.php --no-interaction
-
-CMD crond && php-fpm
+CMD crond && php-fpm && /app/vendor/bin/doctrine-migrations migrations:migrate --configuration=/app/src/migrations.php --db-configuration=/app/src/migrations-db.php --no-interaction
