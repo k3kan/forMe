@@ -53,7 +53,7 @@ SQL;
         return Locations::getLocations();
     }
 
-    private function sendMessage($user, $message): void
+    public function sendMessage($user, $message): void
     {
         $url = $this->getUrl('sendMessage');
         try {
@@ -84,7 +84,7 @@ SQL;
         foreach ($locations as $location) {
             $this->weatherMap->setLatitude($location['latitude']);
             $this->weatherMap->setLongitude($location['longitude']);
-            $weather= $this->weatherMap->getWeather();
+            $weather= $this->weatherMap->getWeatherCoordinate();
             $message .= 'Погода в ' . $weather['town'] . ' составляет ' .  $weather['temperature'] . '°C. Ощущается как ' .  $weather['feelsLike'] . '°C.';
             $message .= 'Скорость ветра составляет ' . $weather['wind'] . 'м/с, влажность ' .  $weather['humidity'] . '%.';
         }

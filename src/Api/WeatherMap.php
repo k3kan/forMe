@@ -12,6 +12,11 @@ class WeatherMap implements ApiWeather
 
     public float $lat;
 
+    public array $queryParams = [
+        'units' => 'metric',
+        'lang' => 'ru',
+    ];
+
     public function __construct(
         public string $token,
         public Client $client,
@@ -28,25 +33,35 @@ class WeatherMap implements ApiWeather
         $this->lat = $lat;
     }
 
-    public function getWeather()
+    public function getWeatherTown($town)
     {
-        $queryParams = [
-            'lat' => $this->lat,
-            'lon' => $this->lon,
-            'appid' => $this->token,
-            'lang' => ' ru'
-        ];
-        $weather = [];
+        $this->queryParams['appid'] = $this->token;
+        $this->queryParams['q'] = $town;
 
+        return $this->getWeatherData($this->queryParams);
+    }
+
+    public function getWeatherCoordinate()
+    {
+        $this->queryParams['appid'] = $this->token;
+        $this->queryParams['lat'] = $this->lat;
+        $this->queryParams['lon'] = $this->lon;
+
+        return $this->getWeatherData($this->queryParams);
+    }
+
+    public function getWeatherData($queryParams)
+    {
         try {
             $response = $this->client->request('GET', $this->url, ['query' => $queryParams]);
             $json = $response->getBody();
             $data = json_decode($json, true);
-            $weather['temperature'] =  round($data['main']['temp'] - 273.15);
-            $weather['feelsLike'] =  round($data['main']['feels_like'] - 273.15);
+            $weather['temperature'] =  $data['main']['temp'];
+            $weather['feelsLike'] =  $data['main']['feels_like'];
             $weather['wind'] =  $data['wind']['speed'];
             $weather['humidity'] =  $data['main']['humidity'];
             $weather['town'] =  $data['name'];
+            $weather['error'] = false;
         } catch (ClientException $e) {
             $weather['error'] =  true;
             error_log ("Ответ не получен. Смотреть подробности " . Psr7\Message::toString($e->getRequest()) . Psr7\Message::toString($e->getResponse()));

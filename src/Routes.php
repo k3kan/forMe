@@ -5,4 +5,5 @@ return [
     ['GET', '/mailings', ['App\Controllers\Mailing', 'mailing']],
     ['GET', '/{slug}', ['App\Controllers\Page', 'show']],
     ['POST', '/weather', ['App\Controllers\Homepage', 'getWeather']],
+    ['POST', '/webhook', ['App\Controllers\Webhook', 'handler']],
 ];
