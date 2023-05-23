@@ -7,7 +7,7 @@ class Users extends Model
     static public function getUsers()
     {
         $sql = <<<SQL
-SELECT username, chat_id 
+SELECT * 
 FROM users;
 SQL;
         return self::getConnection()->fetchAll($sql);

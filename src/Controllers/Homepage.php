@@ -37,7 +37,7 @@ class Homepage
 
         $this->weatherApi->setLongitude($data['lot']);
         $this->weatherApi->setLatitude($data['lat']);
-        $weather = $this->weatherApi->getWeather();
+        $weather = $this->weatherApi->getWeatherCoordinate();
         $content = [
             'name' =>  $this->request->query->get('name', 'User'),
             'weather' => $weather,
