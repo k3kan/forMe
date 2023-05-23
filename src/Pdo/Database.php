@@ -29,7 +29,18 @@ class Database
         return self::$instance;
     }
 
+    /** TODO переписать методы */
     public function execute($query, $params = [])
+    {
+        try {
+            $stmt = $this->pdo->prepare($query);
+            return $stmt->execute($params);
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+        }
+    }
+
+    public function fetchAll($query, $params = [])
     {
         try {
             $stmt = $this->pdo->prepare($query);

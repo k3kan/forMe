@@ -9,6 +9,6 @@ class Locations extends Model
         $sql = <<<SQL
 SELECT town, latitude, longitude FROM locations;
 SQL;
-        return self::getConnection()->execute($sql);
+        return self::getConnection()->fetchAll($sql);
     }
 }
