@@ -1,0 +1,44 @@
+services:
+  #nginx
+  nginx:
+    build:
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - "443:443"
+    volumes:
+      - ./docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - ./public:/app/public
+  #php
+  php:
+    build:
+      dockerfile: ./docker/php/Dockerfile
+      args:
+       - SERVER_TOKEN=${SERVER_TOKEN}
+    volumes:
+      - /app/vendor # the folder is not overwritten
+      - ./docker/php/conf.d/php.ini:/usr/local/etc/php/php.ini
+      - ./:/app
+    environment:
+      WEATHER_TOKEN: ${WEATHER_TOKEN}
+      TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_HOST: ${MYSQL_HOST}
+      SERVER_TOKEN: ${SERVER_TOKEN}
+  #mysql
+  db:
+    image: mysql:8.0
+    volumes:
+      - mysqldata:/var/lib/mysql
+    restart: unless-stopped # similar to always, it is not restarted even after Docker daemon restarts
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+volumes:
+  mysqldata:
