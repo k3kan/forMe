@@ -81,17 +81,17 @@ class Webhook
     protected function deleteRecord($user)
     {
         $result = Users::deleteUser($user['username']);
-        $message = $result ? 'Рассылка отменена' : 'У вас не было установленно рассылки';
+        $message = empty($result) ? 'У вас не было установленно рассылки': 'Рассылка отменена';
         $this->mailing->sendMessage($user, $message);
     }
 
     protected function checkRecord($user, $town)
     {
         $record = Users::getUser($user['username']);
-        if ($record) {
-            $result = Users::updateTown($record[0], $town);
-        } else {
+        if (empty($record)) {
             $result = Users::addUser($user, $town);
+        } else {
+            $result = Users::updateTown($record[0], $town);
         }
 
         return $result;

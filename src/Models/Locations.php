@@ -4,11 +4,15 @@ namespace App\Models;
 
 class Locations extends Model
 {
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     static public function getLocations()
     {
-        $sql = <<<SQL
-SELECT town, latitude, longitude FROM locations;
-SQL;
-        return self::getConnection()->fetchAll($sql);
+        return self::getConnection()
+            ->createQueryBuilder()
+            ->select('town, latitude, longitude')
+            ->from('locations')
+            ->fetchAllAssociative();
     }
 }

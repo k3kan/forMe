@@ -4,60 +4,73 @@ namespace App\Models;
 
 class Users extends Model
 {
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     static public function getUsers()
     {
-        $sql = <<<SQL
-SELECT * 
-FROM users;
-SQL;
-        return self::getConnection()->fetchAll($sql);
+        return self::getConnection()
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('users', 'u')
+            ->fetchAllAssociative();
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     static public function deleteUser($username)
     {
-        $sql = <<<SQL
-DELETE 
-FROM users 
-       WHERE username = :username;
-SQL;
-        return self::getConnection()->execute($sql, ['username' => $username]);
+        return self::getConnection()
+            ->createQueryBuilder()
+            ->delete('users', 'u')
+            ->where('username = ?')
+            ->setParameter(0, $username)
+            ->executeStatement();
     }
 
     static public function getUser($username)
     {
-        $sql = <<<SQL
-SELECT * 
-FROM users 
-       WHERE username = :username;
-SQL;
-        return self::getConnection()->fetchAll($sql, ['username' => $username]);
+        return self::getConnection()
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('users', 'u')
+            ->where('username = ?')
+            ->setParameter(0, $username)
+            ->fetchAssociative();
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     static public function addUser($user, $town)
     {
-        $sql = <<<SQL
-INSERT INTO weather.users (username, chat_id, town_weather)
-    VALUE (:username, :chat_id, :town);
-SQL;
-        return self::getConnection()->execute($sql,
-            [
-                'username' => $user['username'],
-                'chat_id' =>  $user['chat_id'],
-                'town' => $town
-            ]);
+        return self::getConnection()
+            ->createQueryBuilder()
+            ->insert('users')
+            ->values(array(
+                'username' => '?',
+                'chat_id' =>  '?',
+                'town_weather' => '?',
+            ))
+            ->setParameter(0, $user['username'])
+            ->setParameter(1, $user['chat_id'])
+            ->setParameter(2, $town)
+            ->executeStatement();
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     static public function updateTown($user, $town)
     {
-        $sql = <<<SQL
-UPDATE users 
-SET town_weather = :town 
-    WHERE username = :username
-SQL;
-        return self::getConnection()->execute($sql,
-            [
-                'town' => $town,
-                'username' => $user['username'],
-            ]);
+        return self::getConnection()
+            ->createQueryBuilder()
+            ->update('users', 'u')
+            ->set('u.town_weather', '?')
+            ->where('u.username = ?')
+            ->setParameter(0,  $town)
+            ->setParameter(1,  $user['username'])
+            ->executeStatement();
     }
 }
