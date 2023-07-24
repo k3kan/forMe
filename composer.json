@@ -24,6 +24,8 @@
     "twig/twig": "^3.5",
     "guzzlehttp/guzzle": "^7.0",
     "doctrine/migrations": "^3.5",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "doctrine/orm": "*",
+    "symfony/cache": "^6.0"
   }
 }
