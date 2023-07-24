@@ -27,6 +27,6 @@ RUN set -eux; \
 # run crond
 ARG SERVER_TOKEN
 
-RUN echo "0 9 * * * /usr/bin/curl  https://nginx/mailings?token=$SERVER_TOKEN >> /app/logs/cron.log 2>&1" >> /var/spool/cron/crontabs/root
+RUN echo "0 9 * * * /usr/bin/curl  -k https://nginx/mailings?token=$SERVER_TOKEN >> /app/logs/cron.log 2>&1" >> /var/spool/cron/crontabs/root
 
 CMD crond && sh -c '/app/vendor/bin/doctrine-migrations migrations:migrate --configuration=/app/src/migrations.php --db-configuration=/app/src/migrations-db.php --no-interaction' && php-fpm
