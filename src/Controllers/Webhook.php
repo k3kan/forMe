@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Api\WeatherMap;
+use App\Helper\Message;
 use App\Models\Users;
 use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,16 +34,9 @@ class Webhook
 
     protected function sendGreetings($user)
     {
-        $greetings = "Это информационный бот для получения погоды.\n
-Чтобы получить погоду по конкретному городу введите название города. Например Москва.
-Если хотите получать ежедневную рассылку в 12:00 по конкретному городу введите собщение формата\n
-Получить рассылку с городом:Москва\n
-в данному случае будет рассылка с городом Москва.";
-
-        $this->mailing->sendMessage($user, $greetings);
+        $this->mailing->sendMessage($user, Message::GREETING);
     }
 
-    /** TODO вынести сообщения отдельно */
     protected function checkMessage($text, $user)
     {
         $text = filter_var($text, FILTER_SANITIZE_STRING);
@@ -51,11 +45,10 @@ class Webhook
             $town = trim($matches[0], ':');
             $weatherInfo = $this->getWeatherInfo($town, false);
             if (!$weatherInfo) {
-                $message = "Проверьте корректность сообщения. Текст должнен быть вида
-'Получить рассылку с городом:город'";
+                $message = Message::WEATHER_ERROR;
             } else {
                 $result = $this->checkRecord($user, $town);
-                $message = $result ? 'Рассылка установлена' : 'Ошибка сохранения настройки';
+                $message = $result ? Message::SAVE_SUCCESS : Message::SAVE_FAIL;
             }
         } else {
             $message = $this->getWeatherInfo($text);
@@ -65,35 +58,35 @@ class Webhook
 
     protected function getWeatherInfo($town, $showMessage = true): string
     {
-        $message = '';
         $weather = $this->weatherMap->getWeatherTown($town);
         if ($weather['error'] && !$showMessage) {
             return false;
         }
         elseif ($weather['error']) {
-            return "Не удалось определить город. Проверьте корректность сообщения.";
+            return Message::INCORRECT_TOWN;
         }
-        $message .= 'Погода в ' . $weather['town'] . ' составляет ' .  $weather['temperature'] . '°C. Ощущается как ' .  $weather['feelsLike'] . '°C.';
-        $message .= 'Скорость ветра составляет ' . $weather['wind'] . 'м/с, влажность ' .  $weather['humidity'] . '%.';
+        $message = sprintf(Message::WEATHER, $weather['town'], $weather['temperature'], $weather['feelsLike'], $weather['wind'], $weather['humidity']);
+        $message .= '%.';
         return $message;
     }
 
     protected function deleteRecord($user)
     {
         $result = Users::deleteUser($user['username']);
-        $message = empty($result) ? 'У вас не было установленно рассылки': 'Рассылка отменена';
+        $message = empty($result) ? Message::MAILING_FAIL : Message::MAILING_SUCCESS;
         $this->mailing->sendMessage($user, $message);
     }
 
     protected function checkRecord($user, $town)
     {
         $record = Users::getUser($user['username']);
-        if (empty($record)) {
-            $result = Users::addUser($user, $town);
-        } else {
-            $result = Users::updateTown($record[0], $town);
+        if (!empty($record)) {
+            $userTown = $record['town_weather'];
+            if ($userTown === $town) {
+                return true;
+            }
         }
 
-        return $result;
+        return empty($record) ? Users::addUser($user, $town) : Users::updateTown($record[0], $town);
     }
 }
